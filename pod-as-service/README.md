@@ -37,3 +37,6 @@ This is a test Rick Yang Version 1.0.0
 This is a test Rick Yang Version 1.0.0
 This is a test Rick Yang Version 1.0.0
 ```
+
+# Reference
+- https://medium.com/google-cloud/kubernetes-nodeport-vs-loadbalancer-vs-ingress-when-should-i-use-what-922f010849e0
