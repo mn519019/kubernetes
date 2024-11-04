@@ -12,7 +12,7 @@ spec:
     - port: 80
       targetPort: 80
   selector:
-    app: nginx-pod
+    app: nginx-app
     env: dev
     # To route all traffic to qa pod
     # env: qa 

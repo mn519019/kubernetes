@@ -11,8 +11,6 @@ spec:
   ports:
     - port: 80
       targetPort: 80
-  selector:
-    app: nginx-pod
   externalIPs:
     - 52.60.199.226
     - 15.156.229.30

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod-dev
+  namespace: nginx-http
+  labels:
+    app: nginx-app
+    env: dev
+spec:
+  containers:
+  - name: nginx-container
+    image: nginx:latest
+    command: ["/bin/bash", "-c"]
+    args:
+      - echo "dev version 1.0.0" > /usr/share/nginx/html/index.html && nginx -g 'daemon off;'
+    ports:
+      - containerPort: 80
