@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-nlb-dev
+  namespace: nginx-http
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "external"
+    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "instance"
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: nginx-pod
+    env: dev
+    # To route all traffic to qa pod
+    # env: qa 
+  externalIPs:
+    - 35.182.69.20
