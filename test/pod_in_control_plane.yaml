@@ -1,2 +1,18 @@
 # Deploy a pod call nginxpod with image nginx in controlplane, make sure pod is not scheduled in worker node
-#
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginxpod
+  name: nginxpod
+spec:
+  # This has been added for a node assignment 
+  nodeName: ip-172-31-20-7
+  containers:
+  - image: nginx
+    name: nginxpod
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
