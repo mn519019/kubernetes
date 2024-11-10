@@ -1,0 +1,7 @@
+In Kubernetes, the Ingress resource and the Ingress controller work together to manage external access to services within the cluster, but they serve different roles:
+
+Ingress Resource: This is a Kubernetes API object that defines rules for routing external HTTP and HTTPS traffic to services within the cluster. It specifies how requests should be directed based on the host and path.
+Ingress Controller: This is a controller that watches for Ingress resources and configures the underlying load balancer or proxy server to implement the routing rules defined in the Ingress resources. The Ingress controller is responsible for fulfilling the Ingress rules.
+So, the Ingress controller is the component that actually processes the Ingress resources and sets up the necessary routing. You can think of the Ingress resource as the configuration and the Ingress controller as the implementation.
+
+In summary, the Ingress resource defines the desired state, and the Ingress controller makes it happen by configuring the load balancer or proxy to route traffic accordingly. The Ingress controller is essentially the operational component that sits between the Ingress resource and the actual traffic routing.

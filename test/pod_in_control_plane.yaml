@@ -1,0 +1,2 @@
+# Deploy a pod call nginxpod with image nginx in controlplane, make sure pod is not scheduled in worker node
+#

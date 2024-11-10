@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: example-ingress
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: "alb"
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: instance
+spec:
+  rules:
+    - host: rick-alb-test-429897044.ca-central-1.elb.amazonaws.com
+      http:
+        paths:
+          - path: /test.html
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx-app1
+                port:
+                  number: 80
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx-app2
+                port:
+                  number: 80
