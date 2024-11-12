@@ -60,3 +60,21 @@ curl -s 172.31.16.46:30200 | grep -i welcome
 <h1>Welcome to nginx!</h1>
 
 ```
+# manual_scale_up
+- You can find an existing deployment frontend in production namespace, scale down the replicas to 2 and change the image to ngnix:1.25
+
+```
+kubectl scale deploy frontend --replicas=2 -n production
+```
+
+# auto_sclae_deployment
+- Auto scale the existing deployment frontend in production namespace at 80% of pod CPU usage, and set minimum replicas=3 and Maximum replicase=5 
+
+```
+k autoscale deployment/frontend -n production --min=3 --max=5 --cpu-percent=80
+k get hpa -n production
+
+## Expected output
+AME       REFERENCE             TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
+frontend   Deployment/frontend   <unknown>/80%   2         4         2          69s
+```
