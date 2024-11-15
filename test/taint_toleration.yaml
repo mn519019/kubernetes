@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web-pod
+spec:
+  tolerations:
+  - key: "node.kubernetes.io/disk-pressure"
+    operator: "Exists"
+    effect: "NoSchedule"
+  containers:
+  - name: httpd
+    image: httpd
+  nodeName: ip-172-31-16-46

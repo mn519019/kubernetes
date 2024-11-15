@@ -78,3 +78,35 @@ k get hpa -n production
 AME       REFERENCE             TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
 frontend   Deployment/frontend   <unknown>/80%   2         4         2          69s
 ```
+
+# expose_deployment_nodeport
+- Expose existing deployment in production namespace named as frontend through nodeport and nodeport service name should be frontendsvc
+
+```
+k expose -n production svc frontendsvc --name=frontendsvc  --port=80 --type=NodePort 
+
+or 
+
+k apply -f expose_deployment_nodeport.yaml 
+```
+
+# persistent_volume
+- You can find a pod named task-pv-pod in the default namespace, please check the status of the pod and troubleshoot, you can recreate the pod if you want
+
+# taint_and_toleration
+
+- Deploy a pod with the following specifications:
+- pod name: web-pod
+- image: httpd
+- Node: Node01
+- Note: Do not modify any settings on amster and worker nodes 
+
+```
+ k get node ip-172-31-23-161 -o jsonpath='{.spec.taints}'
+ {"effect":"NoSchedule","key":"node.kubernetes.io/disk-pressure","timeAdded":"2024-11-10T18:05:22Z"}]
+ 
+ Then, add a tolerance into a pod 
+
+```
+
+# kubernetes node upgrade
