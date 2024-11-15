@@ -129,7 +129,9 @@ tmpfs           475M     0  475M   0% /proc/acpitmpfs           475M     0  475M
 tmpfs           475M     0  475M   0% /sys/firmware
 ```
 
-
-
+# deploy_busy_box
+- Create a Kubernetes Pod named "my-busybox" with the busybox:1.31.1 image.
+- The pod should run a sleep command for 4800 seconds. 
+- Verify that the Pod is running in Node01
 
 # kubernetes node upgrade
