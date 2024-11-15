@@ -109,4 +109,27 @@ k apply -f expose_deployment_nodeport.yaml
 
 ```
 
+# pv_pvc_deploy
+- Create a new PV named web-pv. It should have a capacity of 2Gi, accessMode ReadWriteOnce, hostpath /vol/data and no storageClassName defined.
+- Next Create a new PVC in namespace production named web-pvc. It should request 2Gi storage, accessMode ReadWriteOnce and should not define a storageClassName. The PVC should bound to the PV correctly. 
+- Finally create a new deployment web-deploy in namespace production which mounts that volume at /tmp/web-data. The pods of that deployment should e of image nginx:1.14.2
+
+```
+k apply -f pv_pvc_deployment.yaml
+k exec -it pod/web-deploy-74d4979444-v4bkx -n production -- /bin/bash
+df -h
+
+## Expected output 
+Filesystem      Size  Used Avail Use% Mounted on
+overlay         7.6G  6.2G  1.5G  82% /
+tmpfs            64M     0   64M   0% /dev
+/dev/root       7.6G  6.2G  1.5G  82% /tmp/web-data           <-------- Mounted 
+shm              64M     0   64M   0% /dev/shmtmpfs           850M   12K  850M   1% /run/secrets/kubernetes.io/serviceaccount
+tmpfs           475M     0  475M   0% /proc/acpitmpfs           475M     0  475M   0% /proc/scsi
+tmpfs           475M     0  475M   0% /sys/firmware
+```
+
+
+
+
 # kubernetes node upgrade
