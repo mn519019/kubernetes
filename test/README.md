@@ -134,4 +134,13 @@ tmpfs           475M     0  475M   0% /sys/firmware
 - The pod should run a sleep command for 4800 seconds. 
 - Verify that the Pod is running in Node01
 
+
+```
+# To make node unschedullable, we can use the command given below
+kubectl cordon $NodeName
+
+# To make node schedulable again, we can use the command given below
+kubectl uncordon $NodeNAme
+```
+
 # kubernetes node upgrade
