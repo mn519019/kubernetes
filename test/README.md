@@ -219,9 +219,22 @@ ssh node01
 - Create a role and rolebinding, both named gitops-role and gitops-rolebinding as well. 
 - These should allow the new SA to only create Secrets and ConfigMaps in that Namespace.
 
+-> Rolebindg will bind role and serviceaccount together so the serviceaccount can act based on the role
+
 ```
 k apply -f role_rolebinding.yaml
+
+# verification
 k -n project-1 auth can-i create pod --as system:serviceaccount:project-1:gitops
+no
+
+k -n project-1 auth can-i create secret --as system:serviceaccount:project-1:gitops
+yes
+
+k -n project-1 auth can-i create configmaps --as system:serviceaccount:project-1:gitops
+yes
 ```
+
+# ingress
 
 # kubernetes node upgrade
