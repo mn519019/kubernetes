@@ -143,4 +143,85 @@ kubectl cordon $NodeName
 kubectl uncordon $NodeNAme
 ```
 
+# network_policy1
+- You have a kubernetes cluster that runs a three-tier web application:
+- a front-end tier (port 80)
+- an application tier (port 8080)
+- a backend tier (port 3306)
+- The security team has mandated that the backend tier should only be accessible from the application tier. 
+
+```
+fron-end -> application -> backend
+
+```
+# side_car_container
+- You can find a pod named multi-pod is running in the cluster and that is logging to a volume.
+- You need to insert a sidecar container into the pod that will also read the logs from the volume using this command
+- "tail -f /var/busybox/log/*.log"
+- image: busybox:1.28 name: sidecar volumepath: /var/busybox/log
+
+-> This type of question will require get the yaml file and modify the file to deploy it 
+
+```
+k get pod
+NAME        READY   STATUS    RESTARTS   AGE
+multi-pod   2/2     Running   0          75s
+
+k logs pod/multi-pod -c sidecar
+```
+
+# cronjob
+- Create a cronjob for running every 2 minutes with busybox image. 
+- The job name should be my-job and it should print the current date and time to the console.
+- After running the job save any one of the pod logsto below path /root/logs.txt
+
+# find_the_schedulable_nodes_in_the_cluster
+- Find the schedulable nodes in the cluster and save the name and count in to the below file
+- File path: /root/nodes.txt
+
+```
+ k get nodes -o jsonpath='{.items[*].spec.taints}'
+
+# Expected output
+[{"effect":"NoSchedule","key":"node-role.kubernetes.io/control-plane"}] [{"effect":"NoSchedule","key":"node.kubernetes.io/disk-pressure","timeAdded":"2024-11-10T18:05:22Z"}]
+
+-> This implies controlplane is not schedulable 
+
+cat /root/nodes.txt
+
+# Expected output
+ip-172-31-16-46
+ip-172-31-23-161
+```
+
+# kubelet troubleshooting
+- Check whether kubelet is running on the node
+- Check the config file
+
+# Joining a node
+
+- Run the below command on a node 
+- Make sure whether kubelet runs on the node
+
+```
+kubeadm token create --print-join-command
+
+# Expected output
+kubeadm join 172.31.20.7:6443 --token isiv82.97gsyns4tz2l8bho --discovery-token-ca-cert-hash sha256:3cfc59d8de87f071aa035e0a43831c4fcb0b
+e8414a9ac6f3dfa49febdfc8f09d
+
+ssh node01 
+-> Then run the command
+```
+
+# roles_and_role_binding
+- Create a new serviceaccount gitops in namespace project-1
+- Create a role and rolebinding, both named gitops-role and gitops-rolebinding as well. 
+- These should allow the new SA to only create Secrets and ConfigMaps in that Namespace.
+
+```
+k apply -f role_rolebinding.yaml
+k -n project-1 auth can-i create pod --as system:serviceaccount:project-1:gitops
+```
+
 # kubernetes node upgrade
