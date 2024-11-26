@@ -236,5 +236,71 @@ yes
 ```
 
 # ingress
+- There are two existing deployments in namespace world which should be made accessible via an ingress
+- First create ClusterIP Services for both Deployments for port 80. The Services should have the same name as the Deployments. 
+
+-> To review it at https://www.youtube.com/watch?v=Zm5sy6otLGc&t=159s
+
+# Daemonset
+- Use namespace project1 for the following.
+- Create a DaemonSet named daemon-imp with image httpd:2.4-alpine and labels id=daemon-imp and uuid=18426a0b-5f59-4e10-923f-c0e078e82462
+- The Pods it creates should request 20 millicore cpu and 20 mebibyte memory
+- The Pods of that DaemonSet should run on all nodes, also controlplanes. 
+
+# etcd_backup_restore_1
+```
+ETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 \
+ --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/server.crt\
+ --key=/etc/kubernetes/pki/etcd/server.key\
+  snapshot save /root/11-25/etcdbackup.db
+
+etcdutl --write-out=table snapshot status etcdbackup.db 
+
+ETCDCTL_API=3 etcdctl --data-dir=/var/lib/etcd-backup --endpoints=https://127.0.0.1:2379 \
+ --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/server.crt\
+ --key=/etc/kubernetes/pki/etcd/server.key\
+  snapshot restore /root/11-25/etcdbackup.db
+```
+
+# etcd_backup_restore_2
+- Create a snapshot of ETCD and save it to /root/backup/etcd-backup-new.db
+- restore an old snapshot located at /root/backup/etcd-backup-old.db to /var/lib/etcd-backup
+
+```
+ETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 \
+ --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/server.crt\
+ --key=/etc/kubernetes/pki/etcd/server.key\
+  snapshot save /root/backup/etcd-backup-new.db
+
+ETCDCTL_API=3 etcdctl --data-dir=/var/lib/etcd-backup --endpoints=https://127.0.0.1:2379 \
+ --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/server.crt\
+ --key=/etc/kubernetes/pki/etcd/server.key\
+  snapshot restore /root/backup/etcd-backup-old.db
+
+# edit /etc/kubernetes/manifest/etcd.yaml and update volume mount
+
+```
+
+# debug_cluster_container_event_logs
+- You can find a pod named multi-container-pod running in the cluster, take the container logs and the container id of the c2 container and save it into the below mentioned location.
+- Restart the c2 container and write the cluster events to the /root/event.log file. 
+
+```
+k logs pod/multi-container-pod -c c2 > /root/event.logs.txt
+
+# Find the node and ssh into the host
+crictl ps 
+
+# Get the id and put in the file
+crictl rm <container id>
+kubectl get events --sort-by=.metadata.creationTimestamp > /root/events.log
+
+# Pod log event
+k events --for pod/multi-container-pod
+
+```
+
+# priority_and_prioritiy_class
+- Find the Pod with the highest priority in Namespace "management" and delete it
 
 # kubernetes node upgrade
