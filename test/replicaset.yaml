@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: web-app
+spec:
+  # modify replicas according to your case
+  replicas: 3
+  selector:
+    matchLabels:
+      tier: web-app
+  template:
+    metadata:
+      labels:
+        tier: web-app
+    spec:
+      containers:
+      - name: web-app
+        image: nginx:latest

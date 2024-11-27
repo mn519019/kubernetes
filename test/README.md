@@ -303,4 +303,131 @@ k events --for pod/multi-container-pod
 # priority_and_prioritiy_class
 - Find the Pod with the highest priority in Namespace "management" and delete it
 
-# kubernetes node upgrade
+-> In Kubernetes, a higher numerical value indicates a higher priority.
+```
+k get pod -A -n kube-system -o yaml | grep -i priorityclassname -B 20
+```
+# replicaset
+- Create a replicaset with below specifications
+- name=web-app
+- image=nginx
+- replicas=3
+
+# configmap_1
+- Create a configmap named "treauerweide" with content tree=treauerweide
+- Create the configmap stored in existing file /root/cm.yaml
+
+# configmap_2
+- Create a pod named pod1 of image nginx:alpine
+- Make key tree of configmap "treauerwide" available as environment variable TREE1
+- Mount all keys of configmap birke as volume.
+- The files should be available under /config/
+- Test env+volume access in the running Pod 
+
+```
+k apply -f configmap_2.yaml
+k exec pod/pod1 -- printenv | grep -i tree
+
+# Expected output
+TREE1=trauerweide
+
+k exec pod/pod1 -- cat /config/tree
+
+# Expected output
+trauerweide
+```
+
+# list_pods_sorted_by_creation_time
+- List the pods in the Safari namespace, sorted by creation time and save the command to the below path
+- /root/pods_timestamp.txt
+
+```
+(Ascending)
+k get pod  --sort-by=.metadata.creationTimestamp 
+
+# Expected output
+NAME              READY   STATUS    RESTARTS   AGE
+hello-world-pod   1/1     Running   0          18h
+pod1              1/1     Running   0          14m
+
+(Descending)
+k get pod  --sort-by=.metadata.creationTimestamp | tac
+pod1              1/1     Running   0          14m
+hello-world-pod   1/1     Running   0          18h
+
+
+k get pod --sort-by=.spec.priority
+NAME              READY   STATUS    RESTARTS   AGE
+hello-world-pod   1/1     Running   0          18h
+pod1              1/1     Running   0          16m
+```
+
+# cordon_and_node
+- Create a new deployment named "web" using the "nginx:1.16" image with 3 replicas.
+- Ensure that no pods are scheduled on the node named kworker. 
+
+```
+k cordon ip-172-31-16-46
+k get node
+
+# Expected output
+NAME               STATUS                     ROLES           AGE   VERSION
+ip-172-31-16-46    Ready,SchedulingDisabled   <none>          71d   v1.29.1
+ip-172-31-20-7     Ready                      control-plane   71d   v1.29.1
+ip-172-31-23-161   Ready                      <none>          71d   v1.29.1
+
+k get pod -o wide
+
+# Expected output
+NAME                   READY   STATUS              RESTARTS   AGE   IP              NODE               NOMINATED NODE   READINESS GATES
+hello-world-pod        1/1     Running             0          18h   192.168.7.134   ip-172-31-23-161   <none>           <none>
+pod1                   1/1     Running             0          23m   192.168.77.58   ip-172-31-16-46    <none>           <none>
+web-76b599ccc6-gfx6l   0/1     ContainerCreating   0          4s    <none>          ip-172-31-23-161   <none>           <none>
+web-76b599ccc6-l45rz   0/1     ContainerCreating   0          4s    <none>          ip-172-31-23-161   <none>           <none>
+web-76b599ccc6-qnczf   0/1     ContainerCreating   0          4s    <none>          ip-172-31-23-161   <none>           <none>
+
+k uncordon ip-172-31-16-46
+node/ip-172-31-16-46 uncordoned
+```
+
+# drain_node
+- Mark the worker node named kworker as unschedulable and reschedule all the pods running on it 
+```
+k cordon ip-172-31-16-46
+k drain --ignore-daemonsets ip-172-31-16-46 --forcenode/ip-172-31-16-46 --force
+
+# Expected output
+Warning: deleting Pods that declare no controller: default/pod1; ignoring DaemonSet-managed Pods: kube-system/calico-node-2wfvw, kube-system/kube-proxy-vg496
+evicting pod default/web-76b599ccc6-xhxsxevicting pod default/pod1
+pod/web-76b599ccc6-xhxsx evictedpod/pod1 evicted
+node/ip-172-31-16-46 drained
+
+```
+
+# kubernetes node upgrade (Do it again)
+- kubectl drain controlplane node without daemonsets 
+- ssh into controlplane
+- sudo apt-mark unhold kubeadm
+- apt-get update
+- apt-get install kubeadm=1.27.0-00
+- sudo apt-mark hold kubeadm
+- kubeadm upgrade apply v1.27.0
+- apt-get install kubelet=1.27.0-00
+- systemctl restart kubelet
+- kubectl uncordon controlplane
+-> Same process for worker node
+
+
+# init_container
+- Add an init container named init-container (which has been defined in spec file /home/master/opt/web-pod.yaml)
+- The init container should create an empty file named /workdir/conf.txt
+- if /workdir/conf.txt is not detected, the pod should exit.
+- Once the spec file has been updated with the init container definition, the pod should be created
+
+```
+k apply -f init_container.yaml
+
+```
+
+# Reference
+- https://www.youtube.com/watch?v=Zm5sy6otLGc&t=159s
