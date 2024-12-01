@@ -26,7 +26,7 @@ k cordon node01
 k drain --ignore-ademonsets node01
 k uncordon node01
 ```
-- Cluster Upgrade (Do it again)
+- Cluster Upgrade (Done)
 https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/
 
 ```
@@ -42,23 +42,53 @@ To see available version update "vim /etc/apt/sources.list.d/kubernetes.list"
 -> kubeadm upgrade node 
 
 ```
-- Backup and Restore 1 (Do it again)
+- Backup and Restore 1 (Done)
 ```
 etcdctl --data-dir /var/lib/etcd-backup snapshot restore /opt/snapshot-pre-boot.db 
 ```
-- Backup and Restore 2
+- Backup and Restore 2 (Review is required)
 
 # Section 7: Security 
-- View Certificate
-- KubeConfig
-- RBAC 
-- Cluster Roles and Role Binding 
+- View Certificate (Done)
+- Certificates API (Done)
+- KubeConfig (Done)
+```
+export KUBECONFIG=<PATH>
+Otherwise
+k config --kubeconfig=<PATH> use-config research
+```
+- RBAC (Review is required)
+
+```
+# Roles and rolebindings are namespaced
+# The kubernets api server may authorize a request using one of several authorization modes: ABAC, RBAC, Node, and so on. 
+k get pod --as=dev-user
+k auth can-i create deployment -n blue --as=dev-user
+```
+
+- Cluster Roles and Role Binding (Done)
+```
+# cluster scoped, so not namespaced
+
+```
 - Service Accounts 
 - Image Security 
 - Security Contexts 
 - Network Policy 
 
+# Section 8: Storage
+- pv and pvc
+- storage class 
 
+# Section 9: Networking
+- Explore Kubernetes Environment
+- Explore CNI
+- Deploy Network Solution 
+- Networking Weave 
+- Service Networking 
+- Explore DNS 
+- Ingress 1
+- Ingress 2
 
 
 
