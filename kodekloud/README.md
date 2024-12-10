@@ -71,24 +71,25 @@ k auth can-i create deployment -n blue --as=dev-user
 # cluster scoped, so not namespaced
 
 ```
-- Service Accounts 
-- Image Security 
-- Security Contexts 
-- Network Policy 
+- Service Accounts (Done, a review is required)
+- Image Security (Done)
+- Security Contexts (Done)
+- Network Policy  (Done)
+-> It is a firewall for kubernetes
 
 # Section 8: Storage
-- pv and pvc
-- storage class 
+- pv and pvc (A review is required)
+- storage class (A review is required)
 
 # Section 9: Networking
-- Explore Kubernetes Environment
-- Explore CNI
-- Deploy Network Solution 
-- Networking Weave 
-- Service Networking 
-- Explore DNS 
-- Ingress 1
-- Ingress 2
+- Explore Kubernetes Environment (Done)
+- Explore CNI (Done)
+- Deploy Network Solution (Done)
+- Networking Weave  (Done)
+- Service Networking  (Done)
+- Explore DNS (Done)
+- Ingress 1 (Done)
+- Ingress 2 (Done)
 
 
 
